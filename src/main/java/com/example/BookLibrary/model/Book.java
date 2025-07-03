@@ -15,4 +15,5 @@ public class Book {
     private String author;
     private String publishby;
     private boolean issued;
+    private String bannerImg; // S3 image URL
 }

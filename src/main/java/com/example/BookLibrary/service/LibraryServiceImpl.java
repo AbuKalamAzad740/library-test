@@ -1,14 +1,19 @@
 package com.example.BookLibrary.service;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.amazonaws.AmazonServiceException;
+import com.amazonaws.SdkClientException;
 import com.example.BookLibrary.Repository.BookRepository;
 import com.example.BookLibrary.Repository.IssueRecordsRepository;
 import com.example.BookLibrary.Repository.UserRepository;
+import com.example.BookLibrary.amazon.S3Service;
 import com.example.BookLibrary.model.Book;
 import com.example.BookLibrary.model.IssueRecord;
 import com.example.BookLibrary.model.User;
@@ -25,8 +30,13 @@ public class LibraryServiceImpl implements LibraryService {
     @Autowired
     private IssueRecordsRepository issueRecordRepository;
 
+    @Autowired
+    private S3Service service;
+
     @Override
-    public Book addBook(Book book) {
+    public Book addBook(MultipartFile file, Book book) throws IOException {
+         String fileurl = service.uploadFile(file);
+         book.setBannerImg(fileurl);
         return bookRepository.save(book);
     }
 
